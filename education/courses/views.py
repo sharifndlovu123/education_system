@@ -57,12 +57,10 @@ class ManageCourseListView(OwnerCourseMixin, ListView):
 # Create view for current user , current form
 class CourseCreateView(OwnerCourseEditMixin, CreateView):
     permission_required = 'courses.add_course'
-    pass
 
 # Update view for current user, current form
 class CourseUpdateView(OwnerCourseEditMixin, UpdateView):
     permission_required = 'courses.change_course'
-    pass
 
 # Delete view for current user, current form
 class CourseDeleteView(OwnerCourseMixin, DeleteView):
