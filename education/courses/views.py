@@ -6,6 +6,14 @@ from django.views.generic.list import ListView
 from .models import Course
 from django.forms import Form
 
+from django.contrib.auth.mixins import (
+    # Replicates the login_required decorator’s functionality.
+    LoginRequiredMixin,
+    #  Grants access to the view to users with a specific permission
+    PermissionRequiredMixin
+)
+
+
 
 class ManageCourseListView(ListView):
     model = Course
@@ -30,7 +38,9 @@ class OwnerEditMixin:
         return super().form_valid(form)
     
 # combines OwnerMixin (current user) and sets up common properties for course-related views:  shows current user courses
-class OwnerCourseMixin(OwnerMixin):
+class OwnerCourseMixin(
+    OwnerMixin,LoginRequiredMixin, PermissionRequiredMixin
+):
     model = Course
     fields = ['subject', 'title', 'slug', 'overview']
     success_url = reverse_lazy('manage_course_list')
@@ -42,15 +52,19 @@ class OwnerCourseEditMixin(OwnerCourseMixin, OwnerEditMixin):
 # Enables List view , for Current user Courses
 class ManageCourseListView(OwnerCourseMixin, ListView):
     template_name = 'courses/manage/course/list.html'
+    permission_required = 'courses.view_course'
     
 # Create view for current user , current form
 class CourseCreateView(OwnerCourseEditMixin, CreateView):
+    permission_required = 'courses.add_course'
     pass
 
 # Update view for current user, current form
 class CourseUpdateView(OwnerCourseEditMixin, UpdateView):
+    permission_required = 'courses.change_course'
     pass
 
 # Delete view for current user, current form
 class CourseDeleteView(OwnerCourseMixin, DeleteView):
     template_name = 'courses/manage/course/delete.html'
+    permission_required = 'courses.delete_course'
