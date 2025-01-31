@@ -1,34 +1,656 @@
 [
-{
-  "model": "courses.subject",
-  "pk": 1,
-  "fields": {
-    "title": "Mathematics",
-    "slug": "mathematics"
+  {
+    "model": "courses.subject",
+    "pk": 1,
+    "fields": {
+      "title": "Mathematics",
+      "slug": "mathematics"
+    }
+  },
+  {
+    "model": "courses.subject",
+    "pk": 2,
+    "fields": {
+      "title": "English",
+      "slug": "english"
+    }
+  },
+  {
+    "model": "courses.subject",
+    "pk": 3,
+    "fields": {
+      "title": "Physics",
+      "slug": "physics"
+    }
+  },
+  {
+    "model": "courses.subject",
+    "pk": 4,
+    "fields": {
+      "title": "Music",
+      "slug": "music"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 1,
+    "fields": {
+      "owner": 1,
+      "subject": 1,
+      "title": "Algebra",
+      "slug": "algebra",
+      "overview": "Introduction to Algebra",
+      "created": "2025-01-26T19:51:06.548Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 2,
+    "fields": {
+      "owner": 1,
+      "subject": 1,
+      "title": "Calculus",
+      "slug": "calculus",
+      "overview": "Introduction to Calculus",
+      "created": "2025-01-26T19:52:34.340Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 3,
+    "fields": {
+      "owner": 1,
+      "subject": 1,
+      "title": "Geometry",
+      "slug": "geometry",
+      "overview": "Introduction to Geometry",
+      "created": "2025-01-26T19:53:34.340Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 4,
+    "fields": {
+      "owner": 1,
+      "subject": 1,
+      "title": "Statistics",
+      "slug": "statistics",
+      "overview": "Introduction to Statistics",
+      "created": "2025-01-26T19:54:34.340Z"
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 1,
+    "fields": {
+      "course": 1,
+      "title": "Module 1",
+      "description": "Introduction to Algebra",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 2,
+    "fields": {
+      "course": 1,
+      "title": "Module 2",
+      "description": "Advanced Algebra",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 3,
+    "fields": {
+      "course": 1,
+      "title": "Module 3",
+      "description": "Algebraic Structures",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 4,
+    "fields": {
+      "course": 2,
+      "title": "Module 1",
+      "description": "Introduction to Calculus",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 5,
+    "fields": {
+      "course": 2,
+      "title": "Module 2",
+      "description": "Differential Calculus",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 6,
+    "fields": {
+      "course": 2,
+      "title": "Module 3",
+      "description": "Integral Calculus",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 7,
+    "fields": {
+      "course": 3,
+      "title": "Module 1",
+      "description": "Introduction to Geometry",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 8,
+    "fields": {
+      "course": 3,
+      "title": "Module 2",
+      "description": "Euclidean Geometry",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 9,
+    "fields": {
+      "course": 3,
+      "title": "Module 3",
+      "description": "Non-Euclidean Geometry",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 10,
+    "fields": {
+      "course": 4,
+      "title": "Module 1",
+      "description": "Introduction to Statistics",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 11,
+    "fields": {
+      "course": 4,
+      "title": "Module 2",
+      "description": "Descriptive Statistics",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 12,
+    "fields": {
+      "course": 4,
+      "title": "Module 3",
+      "description": "Inferential Statistics",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 5,
+    "fields": {
+      "owner": 2,
+      "subject": 2,
+      "title": "Literature",
+      "slug": "literature",
+      "overview": "Introduction to Literature",
+      "created": "2025-01-26T19:55:34.340Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 6,
+    "fields": {
+      "owner": 2,
+      "subject": 2,
+      "title": "Creative Writing",
+      "slug": "creative_writing",
+      "overview": "Introduction to Creative Writing",
+      "created": "2025-01-26T19:56:34.340Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 7,
+    "fields": {
+      "owner": 2,
+      "subject": 2,
+      "title": "Poetry",
+      "slug": "poetry",
+      "overview": "Introduction to Poetry",
+      "created": "2025-01-26T19:57:34.340Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 8,
+    "fields": {
+      "owner": 2,
+      "subject": 2,
+      "title": "Drama",
+      "slug": "drama",
+      "overview": "Introduction to Drama",
+      "created": "2025-01-26T19:58:34.340Z"
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 13,
+    "fields": {
+      "course": 5,
+      "title": "Module 1",
+      "description": "Introduction to Literature",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 14,
+    "fields": {
+      "course": 5,
+      "title": "Module 2",
+      "description": "Literary Analysis",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 15,
+    "fields": {
+      "course": 5,
+      "title": "Module 3",
+      "description": "Literary Criticism",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 16,
+    "fields": {
+      "course": 6,
+      "title": "Module 1",
+      "description": "Introduction to Creative Writing",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 17,
+    "fields": {
+      "course": 6,
+      "title": "Module 2",
+      "description": "Writing Fiction",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 18,
+    "fields": {
+      "course": 6,
+      "title": "Module 3",
+      "description": "Writing Non-Fiction",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 19,
+    "fields": {
+      "course": 7,
+      "title": "Module 1",
+      "description": "Introduction to Poetry",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 20,
+    "fields": {
+      "course": 7,
+      "title": "Module 2",
+      "description": "Poetic Forms",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 21,
+    "fields": {
+      "course": 7,
+      "title": "Module 3",
+      "description": "Poetic Devices",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 22,
+    "fields": {
+      "course": 8,
+      "title": "Module 1",
+      "description": "Introduction to Drama",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 23,
+    "fields": {
+      "course": 8,
+      "title": "Module 2",
+      "description": "Dramatic Techniques",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 24,
+    "fields": {
+      "course": 8,
+      "title": "Module 3",
+      "description": "Playwriting",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 9,
+    "fields": {
+      "owner": 3,
+      "subject": 3,
+      "title": "Classical Mechanics",
+      "slug": "classical_mechanics",
+      "overview": "Introduction to Classical Mechanics",
+      "created": "2025-01-26T19:59:34.340Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 10,
+    "fields": {
+      "owner": 3,
+      "subject": 3,
+      "title": "Electromagnetism",
+      "slug": "electromagnetism",
+      "overview": "Introduction to Electromagnetism",
+      "created": "2025-01-26T20:00:34.340Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 11,
+    "fields": {
+      "owner": 3,
+      "subject": 3,
+      "title": "Thermodynamics",
+      "slug": "thermodynamics",
+      "overview": "Introduction to Thermodynamics",
+      "created": "2025-01-26T20:01:34.340Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 12,
+    "fields": {
+      "owner": 3,
+      "subject": 3,
+      "title": "Quantum Mechanics",
+      "slug": "quantum_mechanics",
+      "overview": "Introduction to Quantum Mechanics",
+      "created": "2025-01-26T20:02:34.340Z"
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 25,
+    "fields": {
+      "course": 9,
+      "title": "Module 1",
+      "description": "Introduction to Classical Mechanics",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 26,
+    "fields": {
+      "course": 9,
+      "title": "Module 2",
+      "description": "Newtonian Mechanics",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 27,
+    "fields": {
+      "course": 9,
+      "title": "Module 3",
+      "description": "Lagrangian Mechanics",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 28,
+    "fields": {
+      "course": 10,
+      "title": "Module 1",
+      "description": "Introduction to Electromagnetism",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 29,
+    "fields": {
+      "course": 10,
+      "title": "Module 2",
+      "description": "Electrostatics",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 30,
+    "fields": {
+      "course": 10,
+      "title": "Module 3",
+      "description": "Magnetostatics",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 31,
+    "fields": {
+      "course": 11,
+      "title": "Module 1",
+      "description": "Introduction to Thermodynamics",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 32,
+    "fields": {
+      "course": 11,
+      "title": "Module 2",
+      "description": "Laws of Thermodynamics",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 33,
+    "fields": {
+      "course": 11,
+      "title": "Module 3",
+      "description": "Thermodynamic Cycles",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 34,
+    "fields": {
+      "course": 12,
+      "title": "Module 1",
+      "description": "Introduction to Quantum Mechanics",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 35,
+    "fields": {
+      "course": 12,
+      "title": "Module 2",
+      "description": "Wave-Particle Duality",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 36,
+    "fields": {
+      "course": 12,
+      "title": "Module 3",
+      "description": "Quantum States",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 13,
+    "fields": {
+      "owner": 4,
+      "subject": 4,
+      "title": "Music Theory",
+      "slug": "music_theory",
+      "overview": "Introduction to Music Theory",
+      "created": "2025-01-26T20:03:34.340Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 14,
+    "fields": {
+      "owner": 4,
+      "subject": 4,
+      "title": "Composition",
+      "slug": "composition",
+      "overview": "Introduction to Composition",
+      "created": "2025-01-26T20:04:34.340Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 15,
+    "fields": {
+      "owner": 4,
+      "subject": 4,
+      "title": "Performance",
+      "slug": "performance",
+      "overview": "Introduction to Performance",
+      "created": "2025-01-26T20:05:34.340Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 16,
+    "fields": {
+      "owner": 4,
+      "subject": 4,
+      "title": "Music History",
+      "slug": "music_history",
+      "overview": "Introduction to Music History",
+      "created": "2025-01-26T20:06:34.340Z"
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 37,
+    "fields": {
+      "course": 13,
+      "title": "Module 1",
+      "description": "Introduction to Music Theory",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 38,
+    "fields": {
+      "course": 13,
+      "title": "Module 2",
+      "description": "Scales and Modes",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 39,
+    "fields": {
+      "course": 13,
+      "title": "Module 3",
+      "description": "Harmony and Chords",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 40,
+    "fields": {
+      "course": 14,
+      "title": "Module 1",
+      "description": "Introduction to Composition",
+      "order": 0
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 41,
+    "fields": {
+      "course": 14,
+      "title": "Module 2",
+      "description": "Melody Writing",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 42,
+    "fields": {
+      "course": 14,
+      "title": "Module 3",
+      "description": "Song Structure",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.module",
+    "pk": 43,
+    "fields": {
+      "course": 15,
+      "title": "Module 1",
+      "description": "Introduction to Performance",
+      "order": 0
+    }
   }
-},
-{
-  "model": "courses.subject",
-  "pk": 2,
-  "fields": {
-    "title": "English",
-    "slug": "english"
-  }
-},
-{
-  "model": "courses.subject",
-  "pk": 3,
-  "fields": {
-    "title": "Physics",
-    "slug": "physics"
-  }
-},
-{
-  "model": "courses.subject",
-  "pk": 4,
-  "fields": {
-    "title": "Music",
-    "slug": "music"
-  }
-}
 ]
