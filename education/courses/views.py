@@ -251,6 +251,7 @@ class ContentOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
 from django.db.models import Count
 from .models import Subject
 class CourseListView(TemplateResponseMixin, View):
+    # if a slug is provided, filter the courses by the subject with the given slug, if no slug is provided, return all courses.
     model = Course
     template_name = 'courses/course/list.html'
     
