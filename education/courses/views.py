@@ -246,3 +246,36 @@ class ContentOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
                 id=id, module__course__owner=request.user
             ).update(order=order)
         return self.render_json_response({'saved': 'OK'})
+
+# show all courses
+from django.db.models import Count
+from .models import Subject
+class CourseListView(TemplateResponseMixin, View):
+    model = Course
+    template_name = 'courses/course/list.html'
+    
+    #  annotate adds an additional field to the query set
+    def get(self, request, subject=None):
+        subjects = Subject.objects.annotate(
+            total_courses=Count('courses')
+        )
+        courses = Course.objects.annotate(
+            total_modules=Count('modules')
+        )
+        if subject:
+            subject = get_object_or_404(Subject, slug=subject)
+            courses = courses.filter(subject=subject)
+        return self.render_to_response(
+            {
+                'subjects': subjects,
+                'subject': subject,
+                'courses': courses
+            }
+        )
+
+
+# display single course overview, expects a pk
+from django.views.generic.detail import DetailView
+class CourseDetailView(DetailView):
+    model = Course
+    template_name = 'courses/course/detail.html'
