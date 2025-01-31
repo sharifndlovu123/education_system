@@ -275,8 +275,18 @@ class CourseListView(TemplateResponseMixin, View):
         )
 
 
-# display single course overview, expects a pk
+
+# display single course overview, expects a pk parameter in the URL to identify the course to display.
 from django.views.generic.detail import DetailView
+from students.forms import CourseEnrollForm
+# we use the form to display the info 
 class CourseDetailView(DetailView):
     model = Course
     template_name = 'courses/course/detail.html'
+    def get_context_data(self, **kwargs):
+        print(self.object)
+        context = super().get_context_data(**kwargs)
+        context['enroll_form'] = CourseEnrollForm(
+            initial={'course':self.object}
+        )
+        return context
