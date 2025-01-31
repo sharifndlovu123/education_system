@@ -97,6 +97,7 @@ class ItemBase(models.Model):
     # rendering a template and returning the rendered content as a string. 
     # The render() method provides a common interface for rendering diverse content.
     def render(self):
+        print("render success")
         return render_to_string(
             f'courses/content/{self._meta.model_name}.html',
             {'item': self}
