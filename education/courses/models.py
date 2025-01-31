@@ -78,6 +78,7 @@ class Content(models.Model):
         ordering = ['order']
 
 
+from django.template.loader import render_to_string
 #  an abstract base model that is then extended by models – each designed to store a particular type of data: text, image, video, and file.
 class ItemBase(models.Model):
     owner = models.ForeignKey(User,
@@ -87,10 +88,20 @@ class ItemBase(models.Model):
     title = models.CharField(max_length=250)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    
     class Meta:
         abstract = True
     def __str__(self):
         return self.title
+    
+    # rendering a template and returning the rendered content as a string. 
+    # The render() method provides a common interface for rendering diverse content.
+    def render(self):
+        return render_to_string(
+            f'courses/content/{self._meta.model_name}.html',
+            {'item': self}
+        )
+        
 class Text(ItemBase):
     content = models.TextField()
 class File(ItemBase):
