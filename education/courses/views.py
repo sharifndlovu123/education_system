@@ -230,7 +230,10 @@ from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 #  receives the new order of module IDs encoded in JSON and updates the order accordingly
 class ModuleOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
     def post(self, request):
+        
         for id, order in self.request_json.items():
+            # iterates through each module, and filters by id, and ensures it matches a specific user
+            # once valide, change a attribute via update
             Module.objects.filter(
                 id=id, course__owner=request.user
             ).update(order=order)
