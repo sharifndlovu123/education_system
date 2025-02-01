@@ -42,13 +42,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'embed_video',
+    'debug_toolbar',
     
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # persite cache
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    # persite cache
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -85,6 +91,22 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# docker run -it --rm -d --name memcached -p 11211:11211 memcached:1.6.26 -m 64 
+
+# Cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211',
+        'TIMEOUT': '300'
+    }
+}
+
+# Per Site Cache
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 60 * 15  # 15 minutes
+CACHE_MIDDLEWARE_KEY_PREFIX = 'educa'
 
 
 # Password validation
@@ -135,3 +157,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # On login go to student course list
 from django.urls import reverse_lazy
 LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
+
+# Required for debug tools.
+INTERNAL_IPS = [
+    '127.0.0.1',
+]   
