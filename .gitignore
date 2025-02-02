@@ -10,6 +10,7 @@ educa
 # Backup files # 
 *.bak 
 
+
 # If you are using PyCharm # 
 # User-specific stuff
 .idea/**/workspace.xml
@@ -106,6 +107,7 @@ venv/
 ENV/ 
 env.bak/ 
 venv.bak/ 
+.myenv
 
 # mkdocs documentation 
 /site 
