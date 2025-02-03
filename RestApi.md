@@ -207,3 +207,110 @@ You can learn more about ViewSets at https://www.django-rest-framework.org/api-g
 
 Building custom API views
 implement your own views with custom logic. Let’s learn how to create a custom API view.
+
+## Building custom API views
+
+DRF provides an APIView class that builds API functionality on top of Django’s View class
+
+The APIView class differs from View by using DRF’s custom Request and Response objects and handling APIException exceptions to return the appropriate HTTP responses. 
+It also has a built-in authentication and authorization system to manage access to views.
+
+create a view for users to enroll in courses. Edit the api/views.py file of the courses application and add the following code
+
+```python
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.views import APIView
+class CourseEnrollView(APIView):
+    def post(self, request, pk, format=None):
+        course = get_object_or_404(Course, pk=pk)
+        course.students.add(request.user)
+        return Response({'enrolled': True})
+```
+Steps
+    1. You create a custom view that subclasses APIView.
+
+    2. You define a post() method for POST actions. No other HTTP method will be allowed for this view.
+
+    3. You expect a pk URL parameter containing the ID of a course. You retrieve the course by the given pk parameter and raise a 404 exception if it’s not found.
+
+    4. You add the current user to the students many-to-many relationship of the Course object and return a successful response.
+
+add corresponding url:
+```python
+path(
+    'courses/<pk>/enroll/',
+    views.CourseEnrollView.as_view(),
+    name='course_enroll'
+),
+```
+
+Theoretically, you could now perform a POST request to enroll the current user in a course. However, you need to be able to identify the user and prevent unauthenticated users from accessing this view. Let’s see how API authentication and permissions work.
+
+
+
+
+## Handling Authentication
+https://www.django-rest-framework.org/api-guide/authentication/.
+DRF provides authentication classes to identify the user performing the request. If authentication is successful, the framework sets the authenticated User object in request.user. 
+
+If no user is authenticated, an instance of Django’s AnonymousUser is set instead.
+
+DRF provides the following authentication backends:
+```markup
+
+1. BasicAuthentication: This is HTTP basic authentication. The user and password are sent by the client in the Authorization HTTP header, encoded with Base64. You can learn more about it at https://en.wikipedia.org/wiki/Basic_access_authentication.
+
+2. TokenAuthentication: This is token-based authentication. A Token model is used to store user tokens. Users include the token in the Authorization HTTP header for authentication.
+
+3. SessionAuthentication: This uses Django’s session backend for authentication. This backend is useful for performing authenticated AJAX requests to the API from your website’s frontend.
+
+4. RemoteUserAuthentication: This allows you to delegate authentication to your web server, which sets a REMOTE_USER environment variable.
+```
+
+You can build a custom authentication backend by subclassing the BaseAuthentication class provided by DRF and overriding the authenticate() method.
+
+### Implementing basic authentication
+You can set authentication on a 'per-view basis' or set it 'globally' with the DEFAULT_AUTHENTICATION_CLASSES setting.
+
+NB - Authentication only identifies the user performing the request.  It won’t allow or deny access to views. You have to use permissions to restrict access to views.
+
+add to existing courseEnroll under api/views.py 
+```python
+# ...
+from rest_framework.authentication import BasicAuthentication
+class CourseEnrollView(APIView):
+    authentication_classes = [BasicAuthentication]
+    # ...
+```
+
+### Adding permissions to views
+
+DRF includes a permission system to restrict access to views. Some of the built-in permissions of DRF are:
+
+```markup
+1. AllowAny: Unrestricted access, regardless of whether a user is authenticated or not.
+
+2. IsAuthenticated: Allows access to authenticated users only.
+
+3. IsAuthenticatedOrReadOnly: Complete access to authenticated users. Anonymous users are only allowed to execute read methods such as GET, HEAD, or OPTIONS.
+
+4. DjangoModelPermissions: Permissions tied to django.contrib.auth. The view requires a queryset attribute. Only authenticated users with model permissions assigned are granted permission.
+
+5. DjangoObjectPermissions: Django permissions on a per-object basis.
+
+Denied permissions return 
+HTTP 401: Unauthorized
+HTTP 403: Permission denied
+```
+
+Add the following to api/views.py 
+```python
+
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+class CourseEnrollView(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+```
