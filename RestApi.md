@@ -314,3 +314,10 @@ class CourseEnrollView(APIView):
     permission_classes = [IsAuthenticated]
 
 ```
+
+test via curl or api
+curl -i -X POST http://127.0.0.1:8000/api/courses/1/enroll/
+returns 401
+
+curl -i -X POST -u student:password http://127.0.0.1:8000/api/courses/1/enroll/
+returns 200

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from courses.models import Subject, Course, Module
+from courses.models import Subject, Course, Module, Content
 from django.db.models import Count
 # The Meta class allows you to specify the model to serialize and the fields to be included for serialization. All model fields will be included if you don’t set a fields attribute. 
 
@@ -35,6 +35,39 @@ class CourseSerializer(serializers.ModelSerializer):
     # owner = serializers.StringRelatedField()
     # subject = serializers.StringRelatedField()
 
+    class Meta:
+        model = Course
+        fields = [
+            'id',
+            'subject',
+            'title',
+            'slug',
+            'overview',
+            'created',
+            'owner',
+            'modules'
+        ]
+
+
+
+# In this code, you define a custom field by subclassing the RelatedField serializer field provided by DRF and overriding the to_representation() method.
+class ItemRelatedField(serializers.RelatedField):
+    def to_representation(self, value):
+        return value.render()
+    
+class ContentSerializer(serializers.ModelSerializer):
+    item = ItemRelatedField(read_only=True)
+    class Meta:
+        model = Content
+        fields = ['order', 'item']
+
+class ModuleWithContentsSerializer(serializers.ModelSerializer):
+    contents = ContentSerializer(many=True)
+    class Meta:
+        model = Module
+        fields = ['order', 'title', 'description', 'contents']
+class CourseWithContentsSerializer(serializers.ModelSerializer):
+    modules = ModuleWithContentsSerializer(many=True)
     class Meta:
         model = Course
         fields = [
