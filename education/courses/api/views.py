@@ -2,8 +2,9 @@ from rest_framework import generics, viewsets
 from courses.api.serializers import SubjectSerializer, CourseSerializer
 from courses.models import Subject, Course
 from django.db.models import Count
-from courses.api.pagination import StandardPagination
+from courses.api.pagination import StandardPagination 
 
+# CRUD implementation is done with the ModelViewSet class
 
 class SubjectsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Subject.objects.annotate(total_courses=Count('courses'))

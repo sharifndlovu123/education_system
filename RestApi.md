@@ -319,5 +319,250 @@ test via curl or api
 curl -i -X POST http://127.0.0.1:8000/api/courses/1/enroll/
 returns 401
 
-curl -i -X POST -u student:password http://127.0.0.1:8000/api/courses/1/enroll/
+curl -i -X POST -u sharif:sharif101 http://127.0.0.1:8000/api/courses/10/enroll/
 returns 200
+
+### Adding additional actions to ViewSets
+You can add extra actions to ViewSets. 
+
+```python
+# ...
+from rest_framework.decorators import action
+class CourseViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Course.objects.prefetch_related('modules')
+    serializer_class = CourseSerializer
+    @action(
+        detail=True,
+        methods=['post'],
+        authentication_classes=[BasicAuthentication],
+        permission_classes=[IsAuthenticated]
+    )
+    def enroll(self, request, *args, **kwargs):
+        course = self.get_object()
+        course.students.add(request.user)
+        return Response({'enrolled': True})
+
+```
+
+### Creating custom permissions
+You want students to be able to access the contents of the courses they are enrolled on.
+ Only students enrolled on a course should be able to access its contents. The best way to do this is with a custom permission class. 
+ 
+```markup 
+DRF provides a BasePermission class that allows you to define the following methods:
+    has_permission(): A view-level permission check
+    has_object_permission(): An instance-level permission check
+```
+
+These methods should return True to grant access, or False otherwise.
+
+Create a new file inside the courses/api/ directory and name it permissions.py. 
+
+```python
+from rest_framework.permissions import BasePermission
+class IsEnrolled(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.students.filter(id=request.user.id).exists()
+```
+
+You subclass the BasePermission class and override the has_object_permission(). You check that the user performing the request is present in the students relationship of the Course object. You are going to use the IsEnrolled permission next.
+
+### Serializing course contents
+
+You need to serialize course contents.
+The Content model includes a generic foreign key that allows you to associate objects of different content models. Yet, you added a common render() method for all content models in the previous chapter. 
+You can use this method to provide rendered content to your API.
+
+api/serializers.py
+```python
+from courses.models import Content, Course, Module, Subject
+class ItemRelatedField(serializers.RelatedField):
+    def to_representation(self, value):
+        return value.render()
+class ContentSerializer(serializers.ModelSerializer):
+    item = ItemRelatedField(read_only=True)
+    class Meta:
+        model = Content
+        fields = ['order', 'item']
+
+```
+
+In this code, you define a custom field by subclassing the RelatedField serializer field provided by DRF and overriding the to_representation() method.
+
+```python
+class ModuleWithContentsSerializer(serializers.ModelSerializer):
+    contents = ContentSerializer(many=True)
+    class Meta:
+        model = Module
+        fields = ['order', 'title', 'description', 'contents']
+class CourseWithContentsSerializer(serializers.ModelSerializer):
+    modules = ModuleWithContentsSerializer(many=True)
+    class Meta:
+        model = Course
+        fields = [
+            'id',
+            'subject',
+            'title',
+            'slug',
+            'overview',
+            'created',
+            'owner',
+            'modules'
+        ]
+
+```
+
+
+ Create a view that mimics the behavior of the retrieve() action but includes the course contents. Edit the api/views.py file and add the following method to the CourseViewSet class:
+
+ ```python
+# ...
+from courses.api.permissions import IsEnrolled
+from courses.api.serializers import CourseWithContentsSerializer
+class CourseViewSet(viewsets.ReadOnlyModelViewSet):
+    # ...
+    @action(
+        detail=True,
+        methods=['get'],
+        serializer_class=CourseWithContentsSerializer,
+        authentication_classes=[BasicAuthentication],
+        permission_classes=[IsAuthenticated, IsEnrolled]
+    )
+    def contents(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+ ```
+
+ Step by step
+```markup
+The description of this method is as follows:
+
+1. You use the action decorator with the parameter detail=True to specify an action that is performed on a single object.
+
+2. You specify that only the GET method is allowed for this action.
+
+3. You use the new CourseWithContentsSerializer serializer class that includes rendered course contents.
+
+4. You use both IsAuthenticated and your custom IsEnrolled permissions. By doing so, you make sure that only users enrolled in the course are able to access its contents.
+
+5. You use the existing retrieve() action to return the Course object.
+
+```
+
+try access http://127.0.0.1:8000/api/courses/1/contents/, with allowed credentials
+
+DRF also allows you to handle creating and editing objects with the ModelViewSet class. We have covered the main aspects of DRF, but you will find further information about its features in its extensive documentation at https://www.django-rest-framework.org/.
+
+
+## Consuming the RESTful API
+
+Now that you have implemented an API, you can consume it in a programmatic manner from other applications.
+
+Interaction Options
+    -  interact with the API using the JavaScript Fetch API in the frontend of your application
+    -   consume the API from applications built with Python or any other programming language.
+
+
+    Test API
+    You are going to create a simple Python application that uses the RESTful API to retrieve all available courses and then enroll a student in all of them. 
+    
+    You will learn how to authenticate against the API using HTTP basic authentication and perform GET and POST requests.
+
+Open the shell and install the Requests library with the following command:
+```bash
+python -m pip install requests==2.31.0
+```
+
+
+Create a new directory next to the educa project directory and name it api_examples. Create a new file inside the api_examples/ directory and name it enroll_all.py. The file structure should now look like this:
+
+api_examples/
+    enroll_all.py
+educa/
+    ...
+
+
+add following code 
+```python
+import requests
+base_url = 'http://127.0.0.1:8000/api/'
+url = f'{base_url}courses/'
+available_courses = []
+while url is not None:
+    print(f'Loading courses from {url}')
+    r = requests.get(url)
+    response = r.json()
+    url = response['next']
+    courses = response['results']
+    available_courses += [course['title'] for course in courses]
+print(f'Available courses: {", ".join(available_courses)}')
+
+```
+
+
+Start the development server from the educa project directory with the following command:
+
+python manage.py runserver
+
+Copy
+
+Explain
+In another shell, run the following command from the api_examples/ directory:
+
+python enroll_all.py
+
+Copy
+
+Explain
+You will see output with a list of all course titles, like this:
+
+Available courses: Introduction to Django, Python for beginners, Algebra basics
+
+
+```python
+import requests
+
+username = ''
+password = ''
+
+base_url = 'http://127.0.0.1:8000/api/'
+url = f'{base_url}courses/'
+available_courses = []
+
+while url is not None:
+    print(f'Loading courses from {url}')
+    r = requests.get(url)
+    response = r.json()
+    url = response['next']
+    courses = response['results']
+    available_courses += [course['title'] for course in courses]
+print(f'Available courses: {", ".join(available_courses)}')
+
+
+for course in courses:
+    course_id = course['id']
+    course_title = course['title']
+    r = requests.post(
+        f'{base_url}courses/{course_id}/enroll/',
+        auth=(username, password)
+    )
+    if r.status_code == 200:
+        # successful request
+        print(f'Successfully enrolled in {course_title}')
+
+```
+
+Explanation
+```markup
+1. You use requests.post() to send a POST request to the URL http://127.0.0.1:8000/api/courses/[id]/enroll/ for each course. 
+
+2. This URL corresponds to the CourseEnrollView API view, which allows you to enroll a user in a course. 
+
+3. You build the URL for each course using the course_id variable. 
+
+4. The CourseEnrollView view requires authentication. It uses the IsAuthenticated permission and the BasicAuthentication authentication class. 
+
+5. The Requests library supports HTTP basic authentication out of the box. You use the auth parameter to pass a tuple with the username and password to authenticate the user, using HTTP basic authentication.
+```
+
+test by running the script
