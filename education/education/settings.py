@@ -31,9 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'courses.apps.CoursesConfig',
     'students.apps.StudentsConfig',
-    
+    'chat.apps.ChatConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -80,6 +81,8 @@ TEMPLATES = [
     },
 ]
 
+
+ASGI_APPLICATION = 'education.asgi.application'
 WSGI_APPLICATION = 'education.wsgi.application'
 
 
