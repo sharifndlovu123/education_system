@@ -143,3 +143,5 @@ GitHub.sublime-settings
 
 # Exclusions #
 !requirements.txt
+__init__.py
+obsidian/*
