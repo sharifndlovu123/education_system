@@ -147,3 +147,5 @@ __init__.py
 obsidian/*
 
 static
+data/cache
+*_initial.py
