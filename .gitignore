@@ -145,3 +145,5 @@ GitHub.sublime-settings
 !requirements.txt
 __init__.py
 obsidian/*
+
+static

@@ -36,7 +36,7 @@
     document.getElementById('request-user').textContent
   );
 
-  const url = 'ws://' + window.location.host +
+  const url = 'wss://' + window.location.host +
               '/ws/chat/room/' + courseId + '/';
   const chatSocket = new WebSocket(url);
 
